@@ -1,18 +1,33 @@
-name: Hello World
+name: Add Two Numbers
 
 on:
-  push:
-    branches:
-      - master 
-  workflow_dispatch:  
+  workflow_dispatch:
+    inputs:
+      number1:
+        description: 'First number'
+        required: true
+        default: '0'
+      number2:
+        description: 'Second number'
+        required: true
+        default: '0'
 
 jobs:
-  hello-world:
-    runs-on: ubuntu-latest  
+  add-numbers:
+    runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3  
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-    - name: Print Hello World
-      run: echo "Hello, Manii!"
+    - name: Add Numbers
+      id: add
+      run: |
+        NUMBER1=${{ github.event.inputs.number1 }}
+        NUMBER2=${{ github.event.inputs.number2 }}
+        SUM=$((NUMBER1 + NUMBER2))
+        echo "The sum of $NUMBER1 and $NUMBER2 is $SUM"
+        echo "::set-output name=result::$SUM"
+
+    - name: Display Result
+      run: echo "The result is ${{ steps.add.outputs.result }}"
