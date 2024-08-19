@@ -1,0 +1,33 @@
+name: Subtract Two Numbers
+
+on:
+  workflow_dispatch:
+    inputs:
+      number1:
+        description: 'First number (minuend)'
+        required: true
+        default: '0'
+      number2:
+        description: 'Second number (subtrahend)'
+        required: true
+        default: '0'
+
+jobs:
+  subtract-numbers:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Subtract Numbers
+      id: subtract
+      run: |
+        NUMBER1=${{ github.event.inputs.number1 }}
+        NUMBER2=${{ github.event.inputs.number2 }}
+        DIFFERENCE=$((NUMBER1 - NUMBER2))
+        echo "The difference between $NUMBER1 and $NUMBER2 is $DIFFERENCE"
+        echo "::set-output name=result::$DIFFERENCE"
+
+    - name: Display Result
+      run: echo "The result is ${{ steps.subtract.outputs.result }}"
